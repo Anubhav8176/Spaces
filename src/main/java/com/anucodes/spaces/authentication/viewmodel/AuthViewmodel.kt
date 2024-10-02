@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anucodes.spaces.authentication.authstate.AuthState
+import com.anucodes.spaces.authentication.model.NewUser
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.rpc.context.AttributeContext.Auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewmodel @Inject constructor(
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
 ): ViewModel() {
 
     private var _authState = MutableStateFlow<AuthState>(AuthState.Idle)
@@ -41,6 +45,9 @@ class AuthViewmodel @Inject constructor(
 
 
     fun RegisterUser(
+        name: String,
+        username: String,
+        profilePicture: String,
         email: String,
         password: String
     ){
@@ -48,10 +55,32 @@ class AuthViewmodel @Inject constructor(
              _authState.value = AuthState.Loading
              auth.createUserWithEmailAndPassword(email, password)
                  .addOnSuccessListener {
+                     val currUser = auth.currentUser
+                     if (currUser!=null){
+                         val userId = currUser.uid
+
+                         val newUser = NewUser(
+                             name = name,
+                             username = username,
+                             email = email,
+                             profilePicture = profilePicture ?: ""
+                         )
+                         firestore.collection("user")
+                             .document(userId)
+                             .set(newUser)
+                             .addOnSuccessListener {
+                                 _authState.value = AuthState.Success
+                                 Log.i("Register User: ", "The user is registered successfully in firebase")
+                             }
+                             .addOnFailureListener {
+                                 _authState.value = AuthState.Failure(it.message.toString())
+                                 Log.i("Register User: ", "The user is not registered to firebase")
+                             }
+                     }
 
                  }
                  .addOnFailureListener{
-
+                     Log.i("Auth Registration: ", "The user failed to created in authentication.")
                  }
          }
     }
