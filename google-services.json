@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "192069843891",
+    "project_id": "spaces-29543",
+    "storage_bucket": "spaces-29543.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192069843891:android:1dffd3c8e786d9a4ca69c6",
+        "android_client_info": {
+          "package_name": "com.anucodes.spaces"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDyhKDH7IN8OyT2O5Hc_r3qZKQkIWwbv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
