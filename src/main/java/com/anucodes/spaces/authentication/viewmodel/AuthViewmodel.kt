@@ -22,7 +22,10 @@ class AuthViewmodel @Inject constructor(
 ): ViewModel() {
 
     private var _authState = MutableStateFlow<AuthState>(AuthState.Idle)
-    private val authState = _authState.asStateFlow()
+    val authState = _authState.asStateFlow()
+
+    private var _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn = _isLoggedIn.asStateFlow()
 
 
     fun LoginUser(
@@ -47,7 +50,6 @@ class AuthViewmodel @Inject constructor(
     fun RegisterUser(
         name: String,
         username: String,
-        profilePicture: String,
         email: String,
         password: String
     ){
@@ -63,7 +65,7 @@ class AuthViewmodel @Inject constructor(
                              name = name,
                              username = username,
                              email = email,
-                             profilePicture = profilePicture ?: ""
+                             profilePicture = ""
                          )
                          firestore.collection("user")
                              .document(userId)
@@ -74,7 +76,7 @@ class AuthViewmodel @Inject constructor(
                              }
                              .addOnFailureListener {
                                  _authState.value = AuthState.Failure(it.message.toString())
-                                 Log.i("Register User: ", "The user is not registered to firebase")
+                                 Log.i("Register User: ", "The user is not registered to firebase ${it.message}")
                              }
                      }
 

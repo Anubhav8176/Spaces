@@ -1,5 +1,6 @@
 package com.anucodes.spaces.ui.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +15,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,19 +31,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
 import com.anucodes.spaces.ui.theme.authFam
 import com.anucodes.spaces.ui.theme.heading
 import com.anucodes.spaces.ui.theme.poppinsFam
 
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    authViewmodel: AuthViewmodel,
+    navController: NavHostController
+){
+
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisi by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -127,9 +143,9 @@ fun LoginScreen(){
                 fontFamily = poppinsFam
             )
             OutlinedTextField(
-                value = email,
+                value = password,
                 onValueChange = {
-                    email = it
+                    password = it
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f),
@@ -137,12 +153,29 @@ fun LoginScreen(){
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Key,
-                        contentDescription = "Email"
+                        contentDescription = "Password"
                     )
                 },
+                trailingIcon = {
+                    val visiIcon = if(passwordVisi){
+                        Icons.Outlined.Visibility
+                    }else{
+                        Icons.Outlined.VisibilityOff
+                    }
+
+                    IconButton(
+                        onClick = {passwordVisi = !passwordVisi}
+                    ) {
+                        Icon(
+                            imageVector = visiIcon,
+                            contentDescription = "passwordVisibility"
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisi) VisualTransformation.None else PasswordVisualTransformation(),
                 placeholder = {
                     Text(
-                        text ="Enter your password",
+                        text = "Enter Password",
                         fontSize = 15.sp,
                         fontFamily = poppinsFam
                     )
@@ -155,7 +188,19 @@ fun LoginScreen(){
                 modifier = Modifier
                     .fillMaxWidth(0.88f),
                 onClick = {
-
+                    if (
+                        email.isNotEmpty() &&
+                        password.isNotEmpty()
+                    ){
+                        authViewmodel.LoginUser(email, password)
+                        navController.navigate("home_graph"){
+                            popUpTo(navController.graph.startDestinationId){
+                                inclusive=true
+                            }
+                        }
+                    }else{
+                        Toast.makeText(context, "Email and Username must not be empty", Toast.LENGTH_LONG).show()
+                    }
                 },
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -182,7 +227,9 @@ fun LoginScreen(){
                     contentColor = Color.Black
                 ),
                 border = BorderStroke(1.dp, Color.Black),
-                onClick = {}
+                onClick = {
+                    navController.navigate("signup_screen")
+                }
             ) {
                 Text(
                     text = "New to spaces?",
