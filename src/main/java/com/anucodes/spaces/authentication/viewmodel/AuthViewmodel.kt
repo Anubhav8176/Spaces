@@ -27,6 +27,15 @@ class AuthViewmodel @Inject constructor(
     private var _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
+    init {
+        val user = auth.currentUser
+        if (user != null){
+            _isLoggedIn.value = true
+        }else{
+            _isLoggedIn.value = false
+        }
+    }
+
 
     fun LoginUser(
         email: String,
@@ -85,5 +94,10 @@ class AuthViewmodel @Inject constructor(
                      Log.i("Auth Registration: ", "The user failed to created in authentication.")
                  }
          }
+    }
+
+    fun logout(){
+        auth.signOut()
+        _authState.value = AuthState.Idle
     }
 }

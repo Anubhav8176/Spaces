@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
-import com.anucodes.spaces.homescreen.HomeScreen
+import com.anucodes.spaces.ui.homescreen.HomeScreen
 import com.anucodes.spaces.ui.authentication.LoginScreen
 import com.anucodes.spaces.ui.authentication.SignUpScreen
 
@@ -56,6 +56,7 @@ fun CentralNavigation(
         ){
             composable("home_screen"){
                 HomeScreen(
+                    authViewmodel,
                     navController
                 )
             }
