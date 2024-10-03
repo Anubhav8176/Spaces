@@ -96,8 +96,16 @@ class AuthViewmodel @Inject constructor(
          }
     }
 
+    fun forgotPassword(){
+
+    }
+
     fun logout(){
         auth.signOut()
+        _authState.value = AuthState.Idle
+    }
+
+    fun updateAuthState(){
         _authState.value = AuthState.Idle
     }
 }

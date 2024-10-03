@@ -23,7 +23,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,10 +41,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.anucodes.spaces.authentication.authstate.AuthState
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
 import com.anucodes.spaces.ui.theme.authFam
 import com.anucodes.spaces.ui.theme.heading
 import com.anucodes.spaces.ui.theme.poppinsFam
+import com.google.rpc.context.AttributeContext.Auth
 
 
 @Composable
@@ -56,6 +60,29 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisi by remember { mutableStateOf(false) }
+    val authState by authViewmodel.authState.collectAsState()
+
+    when(authState){
+        is AuthState.Success->{
+            navController.navigate("home_graph"){
+                popUpTo(navController.graph.startDestinationId){
+                    inclusive=true
+                }
+            }
+        }
+        is AuthState.Failure->{
+            Toast.makeText(context, (authState as AuthState.Failure).message, Toast.LENGTH_LONG).show()
+            email = ""
+            password = ""
+            authViewmodel.updateAuthState()
+        }
+        is AuthState.Loading->{
+
+        }
+        is AuthState.Idle->{
+
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -184,6 +211,20 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(0.1f))
 
+//            TextButton(
+//                onClick = {
+//
+//                }
+//            ) {
+//                Text(
+//                    text = "Forgot Password?",
+//                    fontSize = 16.sp,
+//                    fontFamily = poppinsFam
+//                )
+//            }
+
+            Spacer(modifier = Modifier.weight(0.1f))
+
             Button(
                 modifier = Modifier
                     .fillMaxWidth(0.88f),
@@ -193,11 +234,6 @@ fun LoginScreen(
                         password.isNotEmpty()
                     ){
                         authViewmodel.LoginUser(email, password)
-                        navController.navigate("home_graph"){
-                            popUpTo(navController.graph.startDestinationId){
-                                inclusive=true
-                            }
-                        }
                     }else{
                         Toast.makeText(context, "Email and Username must not be empty", Toast.LENGTH_LONG).show()
                     }
