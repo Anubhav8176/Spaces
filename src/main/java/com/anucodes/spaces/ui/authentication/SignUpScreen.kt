@@ -6,12 +6,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Person
@@ -19,10 +22,17 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,8 +55,12 @@ import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
 import com.anucodes.spaces.ui.theme.authFam
 import com.anucodes.spaces.ui.theme.heading
 import com.anucodes.spaces.ui.theme.poppinsFam
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     authViewmodel: AuthViewmodel,
@@ -59,10 +73,12 @@ fun SignUpScreen(
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+    var selectedDate by remember { mutableStateOf("") }
     var passwordVisi by remember { mutableStateOf(false) }
-
+    var showDialog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
     val authState by authViewmodel.authState.collectAsState()
+
 
     when(authState){
         is AuthState.Success->{
@@ -70,6 +86,7 @@ fun SignUpScreen(
                 popUpTo(navController.graph.startDestinationId){
                     inclusive=true
                 }
+                launchSingleTop=true
             }
         }
         is AuthState.Failure->{
@@ -85,6 +102,60 @@ fun SignUpScreen(
 
         }
     }
+
+    if (showDialog){
+        DatePickerDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        selectedDate = datePickerState.selectedDateMillis?.let {
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(it))
+                        }.toString()
+                        showDialog = false
+                    }
+                ) {
+                    Text(
+                        text = "Ok",
+                        fontSize = 15.sp,
+                        fontFamily = poppinsFam
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                    }
+                ) {
+                    Text(
+                        text = "Cancel",
+                        fontSize = 15.sp,
+                        fontFamily = poppinsFam
+                    )
+                }
+            }
+        ){
+            DatePicker(
+                state = datePickerState,
+                title = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        text = "Select Date of birth",
+                        fontSize = 15.sp,
+                        fontFamily = poppinsFam,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            )
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -141,28 +212,32 @@ fun SignUpScreen(
                 fontSize = 15.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = name,
-                onValueChange = {
-                    name = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = "Name"
-                    )
-                },
-                placeholder = {
-                    Text(
-                        text = "Enter fullname",
-                        fontSize = 15.sp,
-                        fontFamily = poppinsFam
-                    )
-                }
-            )
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = {
+                        name = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = "Name"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Enter fullname",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
 
@@ -173,28 +248,32 @@ fun SignUpScreen(
                 fontSize = 15.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = username,
-                onValueChange = {
-                    username = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = "Username"
-                    )
-                },
-                placeholder = {
-                    Text(
-                        text = "Enter username",
-                        fontSize = 15.sp,
-                        fontFamily = poppinsFam
-                    )
-                }
-            )
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ) {
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = {
+                        username = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = "Username"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Enter username",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
 
@@ -205,28 +284,32 @@ fun SignUpScreen(
                 fontSize = 15.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = "Email"
-                    )
-                },
-                placeholder = {
-                    Text(
-                        text = "Enter email",
-                        fontSize = 15.sp,
-                        fontFamily = poppinsFam
-                    )
-                }
-            )
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ) {
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = {
+                        email = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Email,
+                            contentDescription = "Email"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Enter email",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
 
@@ -237,45 +320,85 @@ fun SignUpScreen(
                 fontSize = 15.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Key,
-                        contentDescription = "Password"
-                    )
-                },
-                trailingIcon = {
-                    val visiIcon = if(passwordVisi){
-                        Icons.Outlined.Visibility
-                    }else{
-                        Icons.Outlined.VisibilityOff
-                    }
-
-                    IconButton(
-                        onClick = {passwordVisi = !passwordVisi}
-                    ) {
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ) {
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
                         Icon(
-                            imageVector = visiIcon,
-                            contentDescription = "passwordVisibility"
+                            imageVector = Icons.Outlined.Key,
+                            contentDescription = "Password"
+                        )
+                    },
+                    trailingIcon = {
+                        val visiIcon = if (passwordVisi) {
+                            Icons.Outlined.Visibility
+                        } else {
+                            Icons.Outlined.VisibilityOff
+                        }
+
+                        IconButton(
+                            onClick = { passwordVisi = !passwordVisi }
+                        ) {
+                            Icon(
+                                imageVector = visiIcon,
+                                contentDescription = "passwordVisibility"
+                            )
+                        }
+                    },
+                    visualTransformation = if (passwordVisi) VisualTransformation.None else PasswordVisualTransformation(),
+                    placeholder = {
+                        Text(
+                            text = "Enter Password",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
                         )
                     }
-                },
-                visualTransformation = if (passwordVisi) VisualTransformation.None else PasswordVisualTransformation(),
-                placeholder = {
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(0.88f),
+                text = "Date of birth",
+                fontSize = 16.sp,
+                fontFamily = poppinsFam
+            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f),
+                border = BorderStroke(1.dp, Color.Black),
+                elevation = CardDefaults.elevatedCardElevation(10.dp)
+            ){
+                Row {
+                    IconButton(
+                        onClick = {
+                            showDialog = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Add date"
+                        )
+                    }
+
                     Text(
-                        text = "Enter Password",
-                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .fillMaxWidth(0.88f)
+                            .padding(10.dp),
+                        text = selectedDate.toString(),
+                        fontSize = 16.sp,
                         fontFamily = poppinsFam
                     )
                 }
-            )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
 
@@ -289,23 +412,18 @@ fun SignUpScreen(
                         email.isNotEmpty() &&
                         password.isNotEmpty()
                     ){
-                        authViewmodel.RegisterUser(name, username, email, password)
-                        navController.navigate("home_graph"){
-                            popUpTo(navController.graph.startDestinationId){
-                                inclusive=true
-                            }
-                        }
-
+                        authViewmodel.RegisterUser(name, username, email, password, selectedDate)
                     }else{
                         Toast.makeText(context, "No field should be left empty", Toast.LENGTH_LONG).show()
                     }
                 },
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
+                    containerColor = Color(0xFFD3B3F8),
                     contentColor = Color.Black
                 ),
-                border = BorderStroke(1.dp, Color.Black)
+                border = BorderStroke(1.dp, Color.Black),
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp)
             ) {
                 Text(
                     text = "Register",
@@ -321,13 +439,14 @@ fun SignUpScreen(
                     .fillMaxWidth(0.88f),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
+                    containerColor = Color(0xFFD3B3F8),
                     contentColor = Color.Black
                 ),
                 border = BorderStroke(1.dp, Color.Black),
                 onClick = {
                     navController.navigate("login_screen")
-                }
+                },
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp)
             ) {
                 Text(
                     text = "Already registered to spaces?",

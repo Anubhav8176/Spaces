@@ -19,6 +19,8 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -68,6 +70,7 @@ fun LoginScreen(
                 popUpTo(navController.graph.startDestinationId){
                     inclusive=true
                 }
+                launchSingleTop=true
             }
         }
         is AuthState.Failure->{
@@ -138,28 +141,33 @@ fun LoginScreen(
                 fontSize = 18.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = "Email"
-                    )
-                },
-                placeholder = {
-                    Text(
-                        text ="Enter your email",
-                        fontSize = 15.sp,
-                        fontFamily = poppinsFam
-                    )
-                }
-            )
+
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ){
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = {
+                        email = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Email,
+                            contentDescription = "Email"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Enter your email",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
             Text(
@@ -169,59 +177,49 @@ fun LoginScreen(
                 fontSize = 18.sp,
                 fontFamily = poppinsFam
             )
-            OutlinedTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(15.dp),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Key,
-                        contentDescription = "Password"
-                    )
-                },
-                trailingIcon = {
-                    val visiIcon = if(passwordVisi){
-                        Icons.Outlined.Visibility
-                    }else{
-                        Icons.Outlined.VisibilityOff
-                    }
-
-                    IconButton(
-                        onClick = {passwordVisi = !passwordVisi}
-                    ) {
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(7.dp)
+            ) {
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    shape = RoundedCornerShape(15.dp),
+                    leadingIcon = {
                         Icon(
-                            imageVector = visiIcon,
-                            contentDescription = "passwordVisibility"
+                            imageVector = Icons.Outlined.Key,
+                            contentDescription = "Password"
+                        )
+                    },
+                    trailingIcon = {
+                        val visiIcon = if (passwordVisi) {
+                            Icons.Outlined.Visibility
+                        } else {
+                            Icons.Outlined.VisibilityOff
+                        }
+
+                        IconButton(
+                            onClick = { passwordVisi = !passwordVisi }
+                        ) {
+                            Icon(
+                                imageVector = visiIcon,
+                                contentDescription = "passwordVisibility"
+                            )
+                        }
+                    },
+                    visualTransformation = if (passwordVisi) VisualTransformation.None else PasswordVisualTransformation(),
+                    placeholder = {
+                        Text(
+                            text = "Enter Password",
+                            fontSize = 15.sp,
+                            fontFamily = poppinsFam
                         )
                     }
-                },
-                visualTransformation = if (passwordVisi) VisualTransformation.None else PasswordVisualTransformation(),
-                placeholder = {
-                    Text(
-                        text = "Enter Password",
-                        fontSize = 15.sp,
-                        fontFamily = poppinsFam
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.weight(0.1f))
-
-//            TextButton(
-//                onClick = {
-//
-//                }
-//            ) {
-//                Text(
-//                    text = "Forgot Password?",
-//                    fontSize = 16.sp,
-//                    fontFamily = poppinsFam
-//                )
-//            }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(0.1f))
 
@@ -240,10 +238,11 @@ fun LoginScreen(
                 },
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
+                    containerColor = Color(0xFFD3B3F8),
                     contentColor = Color.Black
                 ),
-                border = BorderStroke(1.dp, Color.Black)
+                border = BorderStroke(1.dp, Color.Black),
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp)
             ) {
                 Text(
                     text = "Login",
@@ -259,13 +258,14 @@ fun LoginScreen(
                     .fillMaxWidth(0.88f),
                 shape = RoundedCornerShape(15.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
+                    containerColor = Color(0xFFD3B3F8),
                     contentColor = Color.Black
                 ),
                 border = BorderStroke(1.dp, Color.Black),
                 onClick = {
                     navController.navigate("signup_screen")
-                }
+                },
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp)
             ) {
                 Text(
                     text = "New to spaces?",

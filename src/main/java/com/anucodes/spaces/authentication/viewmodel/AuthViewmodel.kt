@@ -60,7 +60,8 @@ class AuthViewmodel @Inject constructor(
         name: String,
         username: String,
         email: String,
-        password: String
+        password: String,
+        selectedDate: String
     ){
          viewModelScope.launch {
              _authState.value = AuthState.Loading
@@ -74,7 +75,8 @@ class AuthViewmodel @Inject constructor(
                              name = name,
                              username = username,
                              email = email,
-                             profilePicture = ""
+                             profilePicture = "",
+                             selectedDate = selectedDate
                          )
                          firestore.collection("user")
                              .document(userId)
@@ -91,13 +93,9 @@ class AuthViewmodel @Inject constructor(
 
                  }
                  .addOnFailureListener{
-                     Log.i("Auth Registration: ", "The user failed to created in authentication.")
+                     Log.i("Auth Registration: ", "The user failed to created in authentication.$it")
                  }
          }
-    }
-
-    fun forgotPassword(){
-
     }
 
     fun logout(){
