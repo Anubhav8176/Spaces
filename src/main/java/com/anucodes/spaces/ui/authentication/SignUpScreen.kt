@@ -1,5 +1,6 @@
 package com.anucodes.spaces.ui.authentication
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -413,6 +414,7 @@ fun SignUpScreen(
                         password.isNotEmpty()
                     ){
                         authViewmodel.RegisterUser(name, username, email, password, selectedDate)
+                        Log.i("Debug control:", "Working fine here!!")
                     }else{
                         Toast.makeText(context, "No field should be left empty", Toast.LENGTH_LONG).show()
                     }

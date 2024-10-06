@@ -1,5 +1,6 @@
 package com.anucodes.spaces.ui.authentication
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -232,6 +233,7 @@ fun LoginScreen(
                         password.isNotEmpty()
                     ){
                         authViewmodel.LoginUser(email, password)
+                        Log.i("Debug control:", "Working fine here!!")
                     }else{
                         Toast.makeText(context, "Email and Username must not be empty", Toast.LENGTH_LONG).show()
                     }

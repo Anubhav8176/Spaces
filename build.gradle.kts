@@ -77,6 +77,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
+    //Glide library implementation
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.8.2")
 

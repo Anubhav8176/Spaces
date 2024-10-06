@@ -2,6 +2,7 @@ package com.anucodes.spaces.ui.homescreen
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,6 +18,10 @@ fun MainScreen(
 ){
 
     val homeNavController = rememberNavController()
+
+    LaunchedEffect(Unit){
+        authViewmodel.fetchCurrentUser()
+    }
 
     Scaffold(
         bottomBar = {
@@ -36,7 +41,7 @@ fun MainScreen(
             }
 
             composable("profiles"){
-                ProfileScreen()
+                ProfileScreen(authViewmodel, navController)
             }
         }
     }

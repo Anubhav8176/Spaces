@@ -24,33 +24,44 @@ fun HomeScreen(
     navController: NavHostController,
     innerpadding: PaddingValues
 ){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerpadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            Text(
-                text = "This is home Screen",
-                fontSize = 30.sp,
-                fontFamily = poppinsFam
-            )
-            Button(
-                onClick = {
-                    authViewmodel.logout()
-                    navController.navigate("auth_graph"){
-                        popUpTo(navController.graph.startDestinationId){
-                            inclusive=true
-                        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerpadding),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ){
+        Text(
+            text = "This is home Screen",
+            fontSize = 30.sp,
+            fontFamily = poppinsFam
+        )
+        Button(
+            onClick = {
+                authViewmodel.logout()
+                navController.navigate("auth_graph"){
+                    popUpTo(navController.graph.startDestinationId){
+                        inclusive=true
                     }
                 }
-            ) {
-                Text(
-                    text = "Logout!",
-                    fontSize = 16.sp,
-                    fontFamily = poppinsFam
-                )
             }
+        ) {
+            Text(
+                text = "Logout!",
+                fontSize = 16.sp,
+                fontFamily = poppinsFam
+            )
         }
+        Button(
+            onClick = {
+                authViewmodel.fetchCurrentUser()
+            }
+        ) {
+            Text(
+                text = "Fetch User",
+                fontSize = 16.sp,
+                fontFamily = poppinsFam
+            )
+        }
+    }
 }

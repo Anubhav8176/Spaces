@@ -21,21 +21,31 @@ class AuthViewmodel @Inject constructor(
     private val firestore: FirebaseFirestore
 ): ViewModel() {
 
-    private var _authState = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState = _authState.asStateFlow()
 
-    private var _isLoggedIn = MutableStateFlow(false)
+    private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
+    private val _currentUser = MutableStateFlow<NewUser?>(null)
+    val currentUser = _currentUser.asStateFlow()
+
     init {
+        checkIfUserExist()
+    }
+
+    private fun checkIfUserExist(){
         val user = auth.currentUser
         if (user != null){
+            Log.i("The user: ", "The User is found")
+            fetchCurrentUser()
             _isLoggedIn.value = true
         }else{
+            Log.i("The user: ", "The User is not found")
+            fetchCurrentUser()
             _isLoggedIn.value = false
         }
     }
-
 
     fun LoginUser(
         email: String,
@@ -105,5 +115,37 @@ class AuthViewmodel @Inject constructor(
 
     fun updateAuthState(){
         _authState.value = AuthState.Idle
+    }
+
+    fun fetchCurrentUser(){
+        val currUser = auth.currentUser
+        if (currUser != null){
+            val userId = currUser.uid
+
+            firestore.collection("user")
+                .document(userId)
+                .get()
+                .addOnSuccessListener {
+                    if (it.exists()){
+                        val user = NewUser(
+                            it.getString("name"),
+                            it.getString("username"),
+                            it.getString("email"),
+                            it.getString("profilePicture"),
+                            it.getString("selectedDate"),
+                        )
+                        Log.i("The User is: ", "The User Info is: $user")
+                        _currentUser.value = user
+                    }else{
+                        logout()
+                    }
+                }
+                .addOnFailureListener {
+                    Log.i("The User is: ", "The User is signing out")
+                    logout()
+                }
+        }else{
+            Log.i("The User: ", "The User is found null")
+        }
     }
 }
