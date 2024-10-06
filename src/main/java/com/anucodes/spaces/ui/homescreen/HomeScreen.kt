@@ -24,6 +24,9 @@ fun HomeScreen(
     navController: NavHostController,
     innerpadding: PaddingValues
 ){
+
+    authViewmodel.fetchCurrentUser()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
