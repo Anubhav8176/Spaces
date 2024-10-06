@@ -19,10 +19,6 @@ fun MainScreen(
 
     val homeNavController = rememberNavController()
 
-    LaunchedEffect(Unit){
-        authViewmodel.fetchCurrentUser()
-    }
-
     Scaffold(
         bottomBar = {
             BottomNavigationBar(homeNavController)

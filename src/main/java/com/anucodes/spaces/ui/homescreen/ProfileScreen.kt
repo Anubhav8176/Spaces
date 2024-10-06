@@ -41,7 +41,9 @@ fun ProfileScreen(
 ){
 
     val currentUser by authViewmodel.currentUser.collectAsState()
-    authViewmodel.fetchCurrentUser()
+    LaunchedEffect(currentUser){
+        authViewmodel.fetchCurrentUser()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
