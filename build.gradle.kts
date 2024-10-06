@@ -77,6 +77,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.2")
+
     //Coroutines dependency
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
