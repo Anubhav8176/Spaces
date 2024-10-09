@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierInfo
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +40,7 @@ fun HomeScreen(
     navController: NavHostController,
     innerpadding: PaddingValues
 ){
-    Column(modifier = Modifier.padding(innerpadding)){
+    Column(modifier = Modifier.padding()){
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -69,7 +74,54 @@ fun HomeScreen(
                     textAlign = TextAlign.Center,
                     fontFamily = poppinsFam
                 )
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    items(100){
+                        ChatCardInfo()
+                    }
+                }
             }
         }
+    }
+}
+
+
+@Composable
+fun ChatCardInfo(){
+    Card(
+        modifier = Modifier
+            .padding(vertical = 7.dp)
+    ){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .padding(horizontal = 10.dp, vertical = 8.dp)
+        ){
+            Text(
+                text = "Name of the user",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = poppinsFam
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "12:00",
+                fontSize = 16.sp,
+                fontFamily = poppinsFam
+            )
+        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(horizontal = 10.dp, vertical = 2.dp),
+            text = "This is place where the last message by the particular sender will be visible",
+            fontSize = 16.sp,
+            color = Color.Gray,
+            maxLines = 1
+        )
     }
 }

@@ -2,10 +2,13 @@ package com.anucodes.spaces.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.util.fastCbrt
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -36,7 +39,7 @@ fun BottomNavigationBar(
                         popUpTo(item.route){inclusive=true}
                     }
                 },
-                alwaysShowLabel = true,
+                alwaysShowLabel = false,
                 icon = {
                     Icon(
                         imageVector = item.icon,
