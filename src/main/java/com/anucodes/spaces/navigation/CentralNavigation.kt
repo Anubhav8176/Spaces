@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
+import com.anucodes.spaces.chatfunction.viewmodel.ChatViewmodel
 import com.anucodes.spaces.ui.authentication.LoginScreen
 import com.anucodes.spaces.ui.authentication.SignUpScreen
 import com.anucodes.spaces.ui.homescreen.MainScreen
@@ -16,6 +17,7 @@ import com.anucodes.spaces.ui.homescreen.MainScreen
 @Composable
 fun CentralNavigation(
     authViewmodel: AuthViewmodel,
+    chatViewmodel: ChatViewmodel,
     navController: NavHostController
 ){
 

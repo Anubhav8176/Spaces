@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
+import com.anucodes.spaces.chatfunction.viewmodel.ChatViewmodel
 import com.anucodes.spaces.navigation.CentralNavigation
 import com.anucodes.spaces.ui.authentication.LoginScreen
 import com.anucodes.spaces.ui.authentication.SignUpScreen
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val authViewmodel by viewModels<AuthViewmodel>()
+    private val chatViewmodel by viewModels<ChatViewmodel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class MainActivity : ComponentActivity() {
             SpacesTheme {
                 CentralNavigation(
                     authViewmodel = authViewmodel,
+                    chatViewmodel = chatViewmodel,
                     navController = navController
                 )
             }
