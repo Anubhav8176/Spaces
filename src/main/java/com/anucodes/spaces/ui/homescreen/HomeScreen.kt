@@ -14,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,16 +26,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
+import com.anucodes.spaces.chatfunction.viewmodel.ChatViewmodel
 import com.anucodes.spaces.ui.theme.poppinsFam
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    chatViewmodel: ChatViewmodel,
     authViewmodel: AuthViewmodel,
     navController: NavHostController,
     innerpadding: PaddingValues
 ){
+
+    val friends by chatViewmodel.friends.collectAsState()
+
+    LaunchedEffect(Unit){
+        chatViewmodel.getAllFriends()
+    }
+
     Column(modifier = Modifier.padding()){
         Scaffold(
             topBar = {

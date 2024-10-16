@@ -57,7 +57,7 @@ fun CentralNavigation(
             route = "home_graph"
         ){
             composable("home"){
-                MainScreen( navController, authViewmodel)
+                MainScreen( navController, authViewmodel, chatViewmodel)
             }
         }
     }

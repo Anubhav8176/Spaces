@@ -86,7 +86,8 @@ class AuthViewmodel @Inject constructor(
                              username = username,
                              email = email,
                              profilePicture = "",
-                             selectedDate = selectedDate
+                             selectedDate = selectedDate,
+                             friends = emptyList()
                          )
                          firestore.collection("user")
                              .document(userId)

@@ -8,13 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.anucodes.spaces.authentication.viewmodel.AuthViewmodel
+import com.anucodes.spaces.chatfunction.viewmodel.ChatViewmodel
 import com.anucodes.spaces.navigation.BottomNavigationBar
 
 
 @Composable
 fun MainScreen(
     navController: NavHostController,
-    authViewmodel: AuthViewmodel
+    authViewmodel: AuthViewmodel,
+    chatViewmodel: ChatViewmodel
 ){
 
     val homeNavController = rememberNavController()
@@ -29,7 +31,7 @@ fun MainScreen(
             startDestination = "bottom_home"
         ) {
             composable("bottom_home"){
-                HomeScreen(authViewmodel, navController, innerpading)
+                HomeScreen(chatViewmodel, authViewmodel, navController, innerpading)
             }
 
             composable("add_chat"){
