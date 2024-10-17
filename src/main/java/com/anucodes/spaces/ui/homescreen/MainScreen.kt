@@ -35,7 +35,7 @@ fun MainScreen(
             }
 
             composable("add_chat"){
-
+                AddFriend(chatViewmodel = chatViewmodel)
             }
 
             composable("profiles"){
