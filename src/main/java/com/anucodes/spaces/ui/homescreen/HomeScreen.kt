@@ -47,60 +47,37 @@ fun HomeScreen(
         chatViewmodel.getAllFriends()
     }
 
-    Column(modifier = Modifier.padding()){
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = "Spaces",
-                            fontSize = 40.sp,
-                            fontFamily = poppinsFam,
-                            textAlign = TextAlign.Center
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.DarkGray,
-                        titleContentColor = Color.White
-                    )
-                )
-            }
-        ){ innerpadding->
-            Column(
-                modifier = Modifier
-                    .padding(innerpadding)
-            ){
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    text = "Chats",
-                    fontSize = 30.sp,
-                    textAlign = TextAlign.Center,
-                    fontFamily = poppinsFam
-                )
+    Column(
+        modifier = Modifier
+            .padding(innerpadding)
+    ){
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            text = "Chats",
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center,
+            fontFamily = poppinsFam
+        )
 
-                if (friends.isEmpty()){
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = "Add Friends",
-                        fontSize = 20.sp,
-                        fontFamily = poppinsFam,
-                        textAlign = TextAlign.Center
-                    )
-                }else{
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        items(friends){
-                            ChatCardInfo(it)
-                        }
-                    }
+        if (friends.isEmpty()){
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "Add Friends",
+                fontSize = 20.sp,
+                fontFamily = poppinsFam,
+                textAlign = TextAlign.Center
+            )
+        }else{
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                items(friends){
+                    ChatCardInfo(it)
                 }
             }
         }

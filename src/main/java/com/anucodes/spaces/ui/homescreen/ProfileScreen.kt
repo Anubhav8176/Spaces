@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +40,8 @@ import com.bumptech.glide.integration.compose.placeholder
 @Composable
 fun ProfileScreen(
     authViewmodel: AuthViewmodel,
-    navController: NavHostController
+    navController: NavHostController,
+    innerpadding: PaddingValues
 ){
 
     val currentUser by authViewmodel.currentUser.collectAsState()
@@ -48,7 +50,8 @@ fun ProfileScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(innerpadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
