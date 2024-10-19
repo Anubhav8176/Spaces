@@ -1,5 +1,7 @@
 package com.anucodes.spaces.ui.homescreen
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anucodes.spaces.authentication.model.NewUser
@@ -52,22 +60,20 @@ fun AddFriend(
                 .fillMaxWidth(0.95f),
             value = searchText,
             onValueChange = {
+                chatViewmodel.searchNewFriend(searchText)
                 searchText = it
             },
             shape = RoundedCornerShape(15.dp)
         )
+        Spacer(modifier = Modifier.weight(1f))
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth(0.95f)
         ){
-
-            items(10){
-                SearchedTitle()
+            items(searchedfriends){
+                SearchedTitle(it, chatViewmodel)
             }
-//            items(searchedfriends){
-//                SearchedTitle(it)
-//            }
         }
         Spacer(modifier = Modifier.weight(20f))
     }
@@ -75,22 +81,62 @@ fun AddFriend(
 
 @Composable
 fun SearchedTitle(
-//    friends: NewUser
+    friends: NewUser,
+    chatViewmodel: ChatViewmodel
 ){
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        border = BorderStroke(1.dp, Color.Black),
+        elevation = CardDefaults.elevatedCardElevation(10.dp)
     ){
-        Text(
-            modifier = Modifier.padding(10.dp),
-            text = "Name of User",
-            fontSize = 16.sp,
-            fontFamily = poppinsFam
-        )
-        Text(
-            modifier = Modifier.padding(10.dp),
-            text = "Username of User",
-            fontSize = 16.sp,
-            fontFamily = poppinsFam
-        )
+        Column(
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ){
+            friends.name?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(10.dp),
+                    text = it,
+                    fontSize = 16.sp,
+                    fontFamily = poppinsFam,
+                    color = Color.Black
+                )
+            }
+            friends.username?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(10.dp),
+                    text = it,
+                    fontSize = 16.sp,
+                    fontFamily = poppinsFam,
+                    color = Color.Black
+                )
+            }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
+                onClick = {
+                    val newFriend = Friends(friends, "")
+                    chatViewmodel.addNewFriend(newFriend)
+                },
+                border = BorderStroke(1.dp, Color.Black),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.DarkGray
+                ),
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp)
+            ) {
+                Text(
+                    text = "Add the Friend!!",
+                    fontSize = 16.sp,
+                    fontFamily = poppinsFam,
+                )
+            }
+        }
     }
 }

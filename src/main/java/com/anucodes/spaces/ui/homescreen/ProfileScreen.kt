@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -148,6 +150,35 @@ fun ProfileScreen(
                     fontFamily = poppinsFam
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.weight(2f))
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(0.8f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+            ),
+            border = BorderStroke(1.dp, Color.Black),
+            elevation = ButtonDefaults.elevatedButtonElevation(10.dp),
+            onClick = {
+                authViewmodel.logout()
+                navController.navigate("auth_graph"){
+                    popUpTo(navController.graph.startDestinationId){
+                        inclusive = true
+                    }
+                    launchSingleTop=true
+                }
+            }
+        ) {
+            Text(
+                text = "Logout!!",
+                fontSize = 17.sp,
+                fontFamily = poppinsFam,
+                color = Color.DarkGray
+            )
         }
 
         Spacer(modifier = Modifier.weight(10f))
